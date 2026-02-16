@@ -7,7 +7,7 @@ export class ConfigManager {
    */
   static loadConfig(path: string): MCPConfig {
     if (!existsSync(path)) {
-      return { mcpServers: {} };
+      return { mcpServers: {}, userTier: 'community' };
     }
     const content = readFileSync(path, 'utf-8');
     const parsed = JSON.parse(content);

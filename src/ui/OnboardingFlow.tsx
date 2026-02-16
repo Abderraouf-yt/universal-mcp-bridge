@@ -42,7 +42,7 @@ export const OnboardingFlow = () => {
         <Box flexDirection="column" marginTop={1}>
           <Text>Enter absolute path for .mcp_master.json:</Text>
           <Box>
-            <Text color="cyan">> </Text>
+            <Text color="cyan">{">"} </Text>
             <TextInput value={masterPath} onChange={setMasterPath} onSubmit={handlePathSubmit} />
           </Box>
         </Box>

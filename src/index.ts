@@ -24,6 +24,14 @@ program
   });
 
 program
+  .command('login')
+  .description('Sign in to your Universal MCP Bridge account (Pro/Enterprise)')
+  .action(() => {
+    console.log(chalk.cyan('\n🔐 Connecting to Universal MCP Cloud...'));
+    console.log(chalk.yellow('⚠️  Cloud features are currently in Beta. Upgrade at mcp-bridge.com\n'));
+  });
+
+program
   .command('init')
   .description('Initialize the bridge and auto-detect MCP clients')
   .action(() => {
