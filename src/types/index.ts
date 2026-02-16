@@ -10,6 +10,7 @@ export const MCPServerConfigSchema = z.object({
 
 export const MCPConfigSchema = z.object({
   mcpServers: z.record(z.string(), MCPServerConfigSchema),
+  userTier: z.enum(['community', 'pro', 'enterprise']).optional().default('community'),
 });
 
 export type MCPServerConfig = z.infer<typeof MCPServerConfigSchema>;

@@ -20,40 +20,21 @@ program
   .command('ui')
   .description('Launch the interactive Universal MCP Bridge dashboard')
   .action(() => {
-    render(React.createElement(App));
+    render(React.createElement(App, { mode: 'ui' }));
   });
 
 program
   .command('init')
   .description('Initialize the bridge and auto-detect MCP clients')
   .action(() => {
-    console.log(chalk.cyan('\n🚀 Initializing Universal MCP Bridge...'));
-    
-    const clients = detectClients();
-    
-    if (clients.length === 0) {
-      console.log(chalk.yellow('⚠️  No MCP clients detected in standard locations.'));
-    } else {
-      console.log(chalk.green(`\n✅ Found ${clients.length} clients:`));
-      clients.forEach(c => console.log(chalk.gray(`   - ${c.name} (${c.path})`)));
-    }
-
-    if (!existsSync(MASTER_CONFIG_PATH)) {
-      console.log(chalk.cyan(`\n📦 Creating Master Registry at: ${MASTER_CONFIG_PATH}`));
-      const initialConfig = { mcpServers: {} };
-      writeFileSync(MASTER_CONFIG_PATH, JSON.stringify(initialConfig, null, 2));
-    } else {
-      console.log(chalk.blue(`\nℹ️  Master Registry already exists at: ${MASTER_CONFIG_PATH}`));
-    }
-
-    console.log(chalk.green('\n✨ Initialization complete! Run "mcp-bridge sync" to unify your tools.\n'));
+    render(React.createElement(App, { mode: 'init' }));
   });
 
 program
   .command('sync')
   .description('Synchronize MCP servers across all detected clients')
   .action(() => {
-    performSync();
+    render(React.createElement(App, { mode: 'sync' }));
   });
 
 program
