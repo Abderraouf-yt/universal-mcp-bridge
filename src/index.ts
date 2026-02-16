@@ -3,6 +3,8 @@ import { Command } from 'commander';
 import chalk from 'chalk';
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { MASTER_CONFIG_PATH, detectClients } from './lib/discovery.js';
+import { performSync } from './lib/sync.js';
+import { checkHealth } from './lib/health.js';
 
 const program = new Command();
 
@@ -41,16 +43,14 @@ program
   .command('sync')
   .description('Synchronize MCP servers across all detected clients')
   .action(() => {
-    console.log(chalk.cyan('🔍 Scanning for MCP clients...'));
-    // TODO: Implement the port of the PowerShell logic here
-    console.log(chalk.green('✅ Infrastructure ready for sync!'));
+    performSync();
   });
 
 program
   .command('status')
   .description('Check the health of all registered MCP servers')
   .action(() => {
-    console.log(chalk.yellow('📊 Checking MCP Server health...'));
+    checkHealth();
   });
 
 program.parse();
