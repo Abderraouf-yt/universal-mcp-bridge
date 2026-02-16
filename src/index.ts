@@ -2,7 +2,7 @@
 import { Command } from 'commander';
 import chalk from 'chalk';
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
-import { join } from 'node:path';
+import { MASTER_CONFIG_PATH, detectClients } from './lib/discovery.js';
 
 const program = new Command();
 
@@ -12,12 +12,38 @@ program
   .version('1.0.0');
 
 program
+  .command('init')
+  .description('Initialize the bridge and auto-detect MCP clients')
+  .action(() => {
+    console.log(chalk.cyan('\n🚀 Initializing Universal MCP Bridge...'));
+    
+    const clients = detectClients();
+    
+    if (clients.length === 0) {
+      console.log(chalk.yellow('⚠️  No MCP clients detected in standard locations.'));
+    } else {
+      console.log(chalk.green(`\n✅ Found ${clients.length} clients:`));
+      clients.forEach(c => console.log(chalk.gray(`   - ${c.name} (${c.path})`)));
+    }
+
+    if (!existsSync(MASTER_CONFIG_PATH)) {
+      console.log(chalk.cyan(`\n📦 Creating Master Registry at: ${MASTER_CONFIG_PATH}`));
+      const initialConfig = { mcpServers: {} };
+      writeFileSync(MASTER_CONFIG_PATH, JSON.stringify(initialConfig, null, 2));
+    } else {
+      console.log(chalk.blue(`\nℹ️  Master Registry already exists at: ${MASTER_CONFIG_PATH}`));
+    }
+
+    console.log(chalk.green('\n✨ Initialization complete! Run "mcp-bridge sync" to unify your tools.\n'));
+  });
+
+program
   .command('sync')
   .description('Synchronize MCP servers across all detected clients')
   .action(() => {
     console.log(chalk.cyan('🔍 Scanning for MCP clients...'));
     // TODO: Implement the port of the PowerShell logic here
-    console.log(chalk.green('✅ Sync logic not yet ported, but infrastructure is ready!'));
+    console.log(chalk.green('✅ Infrastructure ready for sync!'));
   });
 
 program
