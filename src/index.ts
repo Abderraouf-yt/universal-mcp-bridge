@@ -5,6 +5,9 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { MASTER_CONFIG_PATH, detectClients } from './lib/discovery.js';
 import { performSync } from './lib/sync.js';
 import { checkHealth } from './lib/health.js';
+import React from 'react';
+import { render } from 'ink';
+import { App } from './ui/App.js';
 
 const program = new Command();
 
@@ -12,6 +15,13 @@ program
   .name('mcp-bridge')
   .description('Universal MCP Bridge: The Single Source of Truth for MCP Configs')
   .version('1.0.0');
+
+program
+  .command('ui')
+  .description('Launch the interactive Universal MCP Bridge dashboard')
+  .action(() => {
+    render(React.createElement(App));
+  });
 
 program
   .command('init')

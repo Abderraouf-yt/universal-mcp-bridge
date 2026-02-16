@@ -12,7 +12,8 @@
     "skipLibCheck": true,
     "moduleResolution": "NodeNext",
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "jsx": "react-jsx"
   },
   "include": ["src/**/*"]
 }

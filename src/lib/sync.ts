@@ -1,78 +1,47 @@
-import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import chalk from 'chalk';
 import { MASTER_CONFIG_PATH, detectClients } from './discovery.js';
-import { MCPConfigSchema, type MCPServerConfig } from '../types/index.js';
+import { ConfigManager } from './config-manager.js';
 
 export function performSync() {
-  console.log(chalk.cyan('\n🔄 Starting Bidirectional Sync...'));
+  console.log(chalk.cyan('\n🔄 Starting Universal MCP Bridge Sync...'));
 
   const clients = detectClients();
   if (clients.length === 0) {
-    console.log(chalk.yellow('⚠️  No clients detected. Nothing to sync.'));
+    console.log(chalk.yellow('⚠️  No MCP clients detected. Run "mcp-bridge init" to diagnose.'));
     return;
   }
 
   // 1. Load Master Config
-  let masterConfig: Record<string, MCPServerConfig> = {};
-  if (existsSync(MASTER_CONFIG_PATH)) {
-    try {
-      const content = readFileSync(MASTER_CONFIG_PATH, 'utf-8');
-      const parsed = JSON.parse(content);
-      const validated = MCPConfigSchema.parse(parsed);
-      masterConfig = validated.mcpServers;
-    } catch (err) {
-      console.log(chalk.red(`❌ Error reading Master Registry: ${err}`));
-      return;
-    }
-  }
+  let masterConfig = ConfigManager.loadConfig(MASTER_CONFIG_PATH);
+  let totalHarvested = 0;
 
-  let newServersFound = 0;
-
-  // 2. Harvest from Clients
+  // 2. Harvesting Phase
   clients.forEach((client) => {
     try {
-      const content = readFileSync(client.path, 'utf-8');
-      const parsed = JSON.parse(content);
-      
-      const clientServers = parsed.mcpServers || {};
-
-      Object.entries(clientServers).forEach(([name, config]) => {
-        if (!masterConfig[name]) {
-          console.log(chalk.yellow(`✨ Harvested new server: ${name} from ${client.name}`));
-          masterConfig[name] = config as MCPServerConfig;
-          newServersFound++;
-        }
-      });
+      const clientConfig = ConfigManager.loadConfig(client.path);
+      const harvested = ConfigManager.harvestToMaster(masterConfig, clientConfig);
+      if (harvested > 0) {
+        console.log(chalk.yellow(`✨ Harvested ${harvested} new tools from ${client.name}`));
+        totalHarvested += harvested;
+      }
     } catch (err) {
-      console.log(chalk.gray(`   ⚠️ Could not harvest from ${client.name}: ${err}`));
+      console.log(chalk.gray(`   ⚠️ Skipping ${client.name} harvest (malformed JSON?)`));
     }
   });
 
-  // 3. Save Master Config if updated
-  if (newServersFound > 0) {
-    try {
-      writeFileSync(MASTER_CONFIG_PATH, JSON.stringify({ mcpServers: masterConfig }, null, 2));
-      console.log(chalk.green(`\n✅ Updated Master Registry with ${newServersFound} new servers.`));
-    } catch (err) {
-      console.log(chalk.red(`❌ Failed to update Master Registry: ${err}`));
-      return;
-    }
-  } else {
-    console.log(chalk.blue('\nℹ️  Master Registry is up to date.'));
+  // 3. Save Master if updated
+  if (totalHarvested > 0) {
+    ConfigManager.saveConfig(MASTER_CONFIG_PATH, masterConfig);
+    console.log(chalk.green(`✅ Master Registry updated with ${totalHarvested} new tools.`));
   }
 
-  // 4. Distribute to Clients
+  // 4. Distribution Phase
   clients.forEach((client) => {
     try {
-      const content = readFileSync(client.path, 'utf-8');
-      const parsed = JSON.parse(content);
-      
-      parsed.mcpServers = masterConfig;
-      
-      writeFileSync(client.path, JSON.stringify(parsed, null, 2));
-      console.log(chalk.gray(`🚀 Pushed to ${client.name}`));
+      ConfigManager.distributeFromMaster(client.path, masterConfig);
+      console.log(chalk.gray(`🚀 Synced -> ${client.name}`));
     } catch (err) {
-      console.log(chalk.red(`❌ Failed to push to ${client.name}: ${err}`));
+      console.log(chalk.red(`❌ Failed to sync ${client.name}`));
     }
   });
 
