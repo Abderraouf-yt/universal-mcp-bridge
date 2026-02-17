@@ -24,9 +24,9 @@ export function startWatcher() {
     }
   });
 
-  watcher.on('change', (path: string) => {
+  watcher.on('change', async (path: string) => {
     console.log(chalk.yellow(`\n📝 Change detected in: ${path}`));
-    performSync();
+    await performSync();
     
     notifier.notify({
       title: 'Universal MCP Bridge',

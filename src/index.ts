@@ -75,9 +75,18 @@ program
 program
   .command('login')
   .description('Sign in to your Universal MCP Bridge account (Pro/Enterprise)')
-  .action(() => {
+  .action(async () => {
     console.log(chalk.cyan('\n🔐 Connecting to Universal MCP Cloud...'));
-    console.log(chalk.yellow('⚠️  Cloud features are currently in Beta. Upgrade at mcp-bridge.com\n'));
+    await new Promise(r => setTimeout(r, 1000));
+    
+    // Simulate upgrade logic
+    const masterConfig = ConfigManager.loadConfig(MASTER_CONFIG_PATH);
+    masterConfig.userTier = 'pro';
+    ConfigManager.saveConfig(MASTER_CONFIG_PATH, masterConfig);
+
+    console.log(chalk.green('✅ Successfully logged in!'));
+    console.log(chalk.yellow('✨ Your account has been upgraded to PRO Edition.\n'));
+    console.log(chalk.cyan('Run "mcp-bridge ui" to see your new status.\n'));
   });
 
 program

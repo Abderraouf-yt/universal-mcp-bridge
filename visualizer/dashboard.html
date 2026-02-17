@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal MCP Bridge | Pro Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; color: #ffffff; }
+        .glass { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(12px); }
+        .pro-gradient { background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); }
+        .active-glow { box-shadow: 0 0 20px rgba(34, 197, 94, 0.2); }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Navigation -->
+    <nav class="flex items-center justify-between px-8 py-6 border-b border-white/10">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center">
+                <i class="fa-solid fa-bridge text-black text-xl"></i>
+            </div>
+            <span class="text-xl font-bold tracking-tight">Universal MCP <span class="text-white/50">Bridge</span></span>
+        </div>
+        <div class="flex items-center gap-6">
+            <div class="flex items-center gap-2 px-3 py-1 bg-yellow-500/10 text-yellow-500 rounded-full border border-yellow-500/20 text-xs font-bold uppercase tracking-wider">
+                <i class="fa-solid fa-crown"></i> PRO Edition
+            </div>
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" class="w-10 h-10 rounded-full border border-white/20" alt="User">
+        </div>
+    </nav>
+
+    <main class="p-8 max-w-7xl mx-auto">
+        
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+            <div class="glass p-6 rounded-2xl">
+                <p class="text-white/50 text-sm font-medium mb-1">Total MCP Servers</p>
+                <h3 class="text-3xl font-bold">12</h3>
+                <div class="mt-4 flex items-center gap-2 text-emerald-400 text-xs font-bold">
+                    <i class="fa-solid fa-arrow-up"></i> +2 this week
+                </div>
+            </div>
+            <div class="glass p-6 rounded-2xl">
+                <p class="text-white/50 text-sm font-medium mb-1">Active Clients</p>
+                <h3 class="text-3xl font-bold">4</h3>
+                <p class="mt-4 text-white/30 text-xs">Gemini, Claude, VS Code, Cursor</p>
+            </div>
+            <div class="glass p-6 rounded-2xl border-yellow-500/30">
+                <p class="text-white/50 text-sm font-medium mb-1">Token Savings</p>
+                <h3 class="text-3xl font-bold">4.2M</h3>
+                <p class="mt-4 text-emerald-400 text-xs font-bold">Estimated $84.00 saved</p>
+            </div>
+            <div class="glass p-6 rounded-2xl">
+                <p class="text-white/50 text-sm font-medium mb-1">Cloud Sync Status</p>
+                <h3 class="text-3xl font-bold flex items-center gap-2">
+                    <span class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></span>
+                    Synced
+                </h3>
+                <p class="mt-4 text-white/30 text-xs">Last sync: 2 mins ago</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Tool Management -->
+            <div class="lg:col-span-2 space-y-6">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl font-bold">Registry Explorer</h2>
+                    <button class="px-4 py-2 bg-white text-black rounded-xl font-bold text-sm hover:bg-white/90 transition-colors">
+                        <i class="fa-solid fa-plus mr-2"></i> Add New Server
+                    </button>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Tool Card -->
+                    <div class="glass p-5 rounded-2xl flex items-center justify-between hover:border-white/20 transition-all cursor-pointer">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-indigo-500/20 rounded-xl flex items-center justify-center border border-indigo-500/30">
+                                <i class="fa-solid fa-brain text-indigo-400"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">thought-graph</h4>
+                                <p class="text-white/40 text-xs">Local Node.js Server • 2026-PROJECTS/thought-graph</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="px-3 py-1 bg-emerald-500/10 text-emerald-500 rounded-lg text-[10px] font-bold uppercase tracking-widest border border-emerald-500/20">Active</div>
+                            <i class="fa-solid fa-chevron-right text-white/20"></i>
+                        </div>
+                    </div>
+
+                    <!-- Tool Card -->
+                    <div class="glass p-5 rounded-2xl flex items-center justify-between hover:border-white/20 transition-all cursor-pointer">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-sky-500/20 rounded-xl flex items-center justify-center border border-sky-500/30">
+                                <i class="fa-solid fa-book-atlas text-sky-400"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">context7</h4>
+                                <p class="text-white/40 text-xs">NPX Package • Upstash Registry</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="px-3 py-1 bg-emerald-500/10 text-emerald-500 rounded-lg text-[10px] font-bold uppercase tracking-widest border border-emerald-500/20">Active</div>
+                            <i class="fa-solid fa-chevron-right text-white/20"></i>
+                        </div>
+                    </div>
+
+                    <!-- Tool Card -->
+                    <div class="glass p-5 rounded-2xl flex items-center justify-between hover:border-white/20 transition-all cursor-pointer">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center border border-emerald-500/30">
+                                <i class="fa-brands fa-github text-emerald-400"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">github-mcp</h4>
+                                <p class="text-white/40 text-xs">NPX Package • Model Context Protocol SDK</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="px-3 py-1 bg-white/5 text-white/30 rounded-lg text-[10px] font-bold uppercase tracking-widest border border-white/10">Disabled</div>
+                            <i class="fa-solid fa-chevron-right text-white/20"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="space-y-8">
+                <div>
+                    <h2 class="text-xl font-bold mb-4">Security Center</h2>
+                    <div class="glass p-6 rounded-2xl space-y-4 border-emerald-500/20">
+                        <div class="flex items-start gap-3">
+                            <i class="fa-solid fa-shield-check text-emerald-400 mt-1"></i>
+                            <div>
+                                <p class="text-sm font-bold">Keychain Integration Active</p>
+                                <p class="text-white/40 text-xs mt-1">All API keys are encrypted using system-level hardware modules.</p>
+                            </div>
+                        </div>
+                        <button class="w-full py-3 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-bold border border-white/10 transition-colors">
+                            Manage Vault Credentials
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-xl font-bold mb-4">Discovery Insights</h2>
+                    <div class="glass p-6 rounded-2xl space-y-4">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-white/50">Gemini CLI Parity</span>
+                            <span class="text-emerald-400 font-bold">100%</span>
+                        </div>
+                        <div class="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                            <div class="w-full h-full bg-emerald-500"></div>
+                        </div>
+                        
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-white/50">Cursor Parity</span>
+                            <span class="text-emerald-400 font-bold">100%</span>
+                        </div>
+                        <div class="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                            <div class="w-full h-full bg-emerald-500"></div>
+                        </div>
+
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-white/50">Claude Parity</span>
+                            <span class="text-yellow-500 font-bold">85%</span>
+                        </div>
+                        <div class="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                            <div class="w-[85%] h-full bg-yellow-500"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+</body>
+</html>

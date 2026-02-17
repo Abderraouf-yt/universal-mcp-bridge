@@ -59,7 +59,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
   switch (request.params.name) {
     case "sync_bridge": {
-      performSync();
+      await performSync();
       return {
         content: [{ type: "text", text: "Sync complete." }],
       };

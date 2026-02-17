@@ -15,7 +15,7 @@
     - `mcp-bridge init`: Auto-discovery of 5+ major AI clients.
     - `mcp-bridge sync`: Robust bidirectional merging engine.
     - `mcp-bridge status`: Health monitoring for local/external tools.
-- **Status**: Stable & Production-Ready.
+    - `mcp-bridge add`: Programmatic registration of new servers.
 
 ### Phase 2.5: Interactive UX & Design (Completed)
 - **Deliverable**: Ink-based Interactive Dashboard.
@@ -29,51 +29,45 @@
 - **Features**:
     - `userTier` logic (Community, Pro, Enterprise).
     - Pro-tier "Go Pro" upgrade hooks.
-    - `login` command skeleton.
+    - `login` command simulation.
 
-### Phase 3: The "MCP-First" Architecture (Q2 2026)
+### Phase 3: The "MCP-First" Architecture (Completed)
 - **Objective**: Transform the Bridge into an MCP Server itself.
-- **Description**: Allows other AI agents to programmatically query and modify the MCP registry via the protocol.
 - **Features**:
-    - `list_clients`: Tool to expose detected environments.
-    - `add_server`: Tool to register new servers via LLM prompts.
-    - `trigger_sync`: Tool to force refresh across all spokes.
+    - `list_mcp_clients`: Tool to expose detected environments.
+    - `add_mcp_server`: Tool to register new servers via LLM prompts.
+    - `sync_bridge`: Tool to force refresh across all spokes.
 
-### Phase 4: The Service (In Progress)
-- **Deliverable**: Background Daemon.
-- **Status**: Core watcher and notifications implemented.
+### Phase 4: The Service (Completed)
+- **Deliverable**: Background Daemon & Secure Vault.
 - **Features**:
     - Real-time file watching (Chokidar integration).
     - Automatic bidirectional sync on file change.
     - OS Notification system for sync events.
-    - [ ] Secure Vault for credential management.
+    - Secure Vault for credential management (System Keychain integration).
 
-### Phase 5: The Cloud Hub (Q4 2026 - SaaS)
-- **Deliverable**: Paid Platform.
+### Phase 5: The Cloud Hub (Concept/Scaffold Ready)
+- **Deliverable**: Pro Dashboard & Cloud Client.
 - **Features**:
-    - Cross-device sync.
-    - Team-shared registries.
-    - Analytics dashboard for token/tool usage.
+    - [x] Visualized Pro Dashboard (`visualizer/dashboard.html`).
+    - [x] Cloud Client simulation logic (`src/lib/cloud.ts`).
+    - [ ] Real-time cross-device sync (Production Ready Roadmap).
 
 ## 3. Architecture Design (2026 Best Practices)
 1.  **Registry**: Zod-validated JSON schema (`.mcp_master.json`).
 2.  **Adapters**: Pluggable modules for diverse client config formats.
-3.  **Transport**: StdIO and SSE support for Phase 3 server mode.
-4.  **UI Engine**: React/Ink for interactive terminal experience.
+3.  **Transport**: StdIO support for seamless agent-to-agent communication.
+4.  **Vault**: Native OS Keychain security for sensitive PATs/Keys.
 
 ## 4. Technology Stack
 - **Language**: TypeScript 5.x + Node.js 22+ (ESM).
 - **UI Framework**: Ink (React CLI).
 - **Validation**: Zod.
 - **Protocol**: @modelcontextprotocol/sdk.
-- **Styling**: Chalk, Gradient-String, Ink-Spinner.
+- **Security**: keytar (System Keychain).
+- **Watching**: chokidar.
 
 ## 5. Monetization Strategy
 - **Community (Free)**: All local sync and discovery features.
 - **Pro ($5/mo)**: Cloud Sync, Advanced Health Checks, Analytics.
 - **Enterprise ($20/user/mo)**: Team Hub, RBAC, SSO, Audit Logs.
-
-## 6. Immediate Next Steps
-1.  Implement the `add` command (Port from task list).
-2.  Install `@modelcontextprotocol/sdk` to begin Phase 3.
-3.  Implement `src/server.ts` to expose the Bridge as an MCP server.

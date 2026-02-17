@@ -4,6 +4,7 @@ import Spinner from 'ink-spinner';
 import { detectClients } from '../lib/discovery.js';
 import { ConfigManager } from '../lib/config-manager.js';
 import { MASTER_CONFIG_PATH } from '../lib/discovery.js';
+import { performSync } from '../lib/sync.js';
 
 export const SyncProgress = () => {
   const [step, setStep] = useState(0);
@@ -23,42 +24,15 @@ export const SyncProgress = () => {
       setStatus(`Detected ${clients.length} clients`);
       addLog(`Found: ${clients.map(c => c.name).join(', ')}`);
 
-      // Step 2: Harvesting
+      // Step 2: Harvesting & Distribution
       await new Promise(r => setTimeout(r, 1000));
       setStep(2);
       setProgress(0.5);
-      setStatus('Harvesting tools into Master Registry...');
+      setStatus('Performing intelligent bidirectional sync...');
       
-      let masterConfig = ConfigManager.loadConfig(MASTER_CONFIG_PATH);
-      let totalHarvested = 0;
-
-      clients.forEach(client => {
-        try {
-          const clientConfig = ConfigManager.loadConfig(client.path);
-          const harvested = ConfigManager.harvestToMaster(masterConfig, clientConfig);
-          if (harvested > 0) {
-            addLog(`✨ New tools from ${client.name}: +${harvested}`);
-            totalHarvested += harvested;
-          }
-        } catch (e) {}
-      });
-
-      if (totalHarvested > 0) {
-        ConfigManager.saveConfig(MASTER_CONFIG_PATH, masterConfig);
-      }
-
-      // Step 3: Distribution
-      await new Promise(r => setTimeout(r, 1000));
-      setStep(3);
-      setProgress(0.75);
-      setStatus('Distributing unified config to all clients...');
-
-      clients.forEach(client => {
-        try {
-          ConfigManager.distributeFromMaster(client.path, masterConfig);
-          addLog(`🚀 Synced ${client.name}`);
-        } catch (e) {}
-      });
+      await performSync();
+      addLog('✨ Synchronized Master Registry');
+      addLog('🔒 Secured credentials in system vault');
 
       // Final
       await new Promise(r => setTimeout(r, 500));
