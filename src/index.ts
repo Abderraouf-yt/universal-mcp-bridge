@@ -2,6 +2,7 @@
 import { Command } from 'commander';
 import chalk from 'chalk';
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { MASTER_CONFIG_PATH, detectClients } from './lib/discovery.js';
 import { performSync } from './lib/sync.js';
 import { checkHealth } from './lib/health.js';
@@ -136,6 +137,144 @@ program
   .action(() => {
 
     checkHealth();
+
+  });
+
+
+
+program
+
+  .command('deep-link <url>')
+
+  .description('Handle mcp:// protocol deep links (Internal use)')
+
+  .action(async (url) => {
+
+    try {
+
+      const parsedUrl = new URL(url);
+
+      if (parsedUrl.protocol !== 'mcp:') throw new Error('Invalid protocol');
+
+      
+
+      const name = parsedUrl.searchParams.get('name');
+
+      const cmd = parsedUrl.searchParams.get('cmd');
+
+      const argsStr = parsedUrl.searchParams.get('args');
+
+      
+
+      if (!name || !cmd) throw new Error('Missing name or cmd parameters');
+
+      
+
+      const args = argsStr ? JSON.parse(argsStr) : [];
+
+      
+
+      console.log(chalk.cyan(`\n🔗 Deep Link Detected: Adding ${name}...`));
+
+      
+
+      const masterConfig = ConfigManager.loadConfig(MASTER_CONFIG_PATH);
+
+      ConfigManager.addServer(masterConfig, name, { command: cmd, args });
+
+      ConfigManager.saveConfig(MASTER_CONFIG_PATH, masterConfig);
+
+      
+
+      await performSync();
+
+      
+
+      console.log(chalk.green(`✅ Successfully registered "${name}" via Magic Link!\n`));
+
+    } catch (err: any) {
+
+      console.log(chalk.red(`❌ Deep Link Error: ${err.message}`));
+
+    }
+
+  });
+
+
+
+program
+
+  .command('register-protocol')
+
+  .description('Register the mcp:// protocol handler on this system (Windows)')
+
+  .action(() => {
+
+    if (process.platform !== 'win32') {
+
+      console.log(chalk.yellow('⚠️  Protocol registration is currently only implemented for Windows.'));
+
+      return;
+
+    }
+
+
+
+    const exePath = process.argv[0]; // Node executable or standalone .exe
+
+    const scriptPath = join(process.cwd(), 'dist', 'index.js');
+
+    const command = `"${exePath}" "${scriptPath}" deep-link "%1"`;
+
+
+
+    console.log(chalk.cyan('\n🛠 Registering mcp:// protocol handler...'));
+
+    console.log(chalk.gray(`Command: ${command}`));
+
+
+
+    // We will use a temporary .reg file to make this safe and visible
+
+    const regContent = `Windows Registry Editor Version 5.00
+
+
+
+[HKEY_CLASSES_ROOT\\mcp]
+
+@="URL:Model Context Protocol"
+
+"URL Protocol"=""
+
+
+
+[HKEY_CLASSES_ROOT\\mcp\\shell]
+
+
+
+[HKEY_CLASSES_ROOT\\mcp\\shell\\open]
+
+
+
+[HKEY_CLASSES_ROOT\\mcp\\shell\\open\\command]
+
+@="${command.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"
+
+`;
+
+
+
+    const regFile = join(process.cwd(), 'register_protocol.reg');
+
+    writeFileSync(regFile, regContent);
+
+
+
+    console.log(chalk.green(`\n✅ Registry file created: ${regFile}`));
+
+    console.log(chalk.yellow('👉 Please run this file to complete the "Magic Link" setup.'));
+
+    console.log(chalk.gray('This allows your browser to talk directly to your MCP Bridge.\n'));
 
   });
 

@@ -57,11 +57,11 @@
     - [x] Telemetry Integration (Oracle Agent logic integrated into Server).
     - [x] Real-time cross-device sync (Vision Agent UI integration complete).
 
-### Phase 6: Advanced Distribution (Q3 2026 - Zero Friction)
+### Phase 6: Advanced Distribution (In Progress)
 - **Objective**: Eliminate all setup friction for non-Node users.
 - **Features**:
-    - [ ] **Standalone Binaries**: Use `pkg` or `bun compile` to create .exe/.app files.
-    - [ ] **Magic Link Deep Handler**: Implement `mcp://connect` protocol for one-click browser-to-CLI configuration.
+    - [x] **Magic Link Deep Handler**: Implemented `mcp://` protocol handler logic and Windows Registry generator.
+    - [ ] **Standalone Binaries**: Investigating Bun/Vite combinations for ESM-compatible .exe files (In Research).
     - [ ] **Web-Based Config Generator**: A Next.js visual tool to build registries that "Beam" directly to the local CLI.
     - [ ] **Global NPX Alias**: `npx mcp-bridge start` as the universal setup command.
 
@@ -85,3 +85,25 @@
 - **Community (Free)**: All local sync and discovery features.
 - **Pro ($5/mo)**: Cloud Sync, Advanced Health Checks, Analytics.
 - **Enterprise ($20/user/mo)**: Team Hub, RBAC, SSO, Audit Logs.
+
+## 6. User Verification & QA (Awaiting Testing)
+> [!IMPORTANT]
+> The implementation is completed, but the backend infrastructure needs to be initialized.
+
+### Phase 0: Backend Infrastructure Setup
+- [ ] **Initialize Supabase**: 
+    1. Go to your Supabase Project.
+    2. Open the **SQL Editor**.
+    3. Paste the contents of `supabase_schema.sql` and run it.
+    4. This will create the `registries` and `profiles` tables required for sync.
+
+### Test Suite 1: Cloud & Parity
+- [ ] **GitHub Remote**: Verify repo exists at [Abderraouf-yt/universal-mcp-bridge](https://github.com/Abderraouf-yt/universal-mcp-bridge).
+- [ ] **Supabase Auth**: Run `mcp-bridge signup` and `login` to verify backend connectivity.
+- [ ] **Bidirectional Sync**: Verify tools added in one client appear in others after `mcp-bridge sync`.
+
+### Test Suite 2: Advanced UX
+- [ ] **Ink Dashboard**: Run `mcp-bridge ui` and verify analytics rendering (Pro tier).
+- [ ] **Magic Link**: Run `mcp-bridge register-protocol`, execute the `.reg` file, and test a mock `mcp://` link.
+- [ ] **Watcher**: Run `mcp-bridge watch` and verify desktop notifications on file change.
+

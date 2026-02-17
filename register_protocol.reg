@@ -1,0 +1,24 @@
+Windows Registry Editor Version 5.00
+
+
+
+[HKEY_CLASSES_ROOT\mcp]
+
+@="URL:Model Context Protocol"
+
+"URL Protocol"=""
+
+
+
+[HKEY_CLASSES_ROOT\mcp\shell]
+
+
+
+[HKEY_CLASSES_ROOT\mcp\shell\open]
+
+
+
+[HKEY_CLASSES_ROOT\mcp\shell\open\command]
+
+@="\"C:\\Program Files\\nodejs\\node.exe\" \"C:\\Users\\toumi\\Desktop\\Development\\2026-PROJECTS\\universal-mcp-bridge\\dist\\index.js\" deep-link \"%1\""
+
