@@ -4,11 +4,15 @@
 ![Status: Proprietary](https://img.shields.io/badge/Status-Proprietary-red)
 ![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-blue)
 ![Platform: Windows/macOS/Linux](https://img.shields.io/badge/Platform-Cross--Platform-green)
+[![GitHub: Live](https://img.shields.io/badge/GitHub-Live-success?logo=github)](https://github.com/Abderraouf-yt/universal-mcp-bridge)
 
 ## 📖 Overview
 **Universal MCP Bridge** (formerly *MCP-Omni*) is a centralized configuration manager and bidirectional synchronization engine for AI developer tools. It solves the fragmentation problem caused by disparate MCP implementations across IDEs (VS Code, Cursor, Windsurf) and CLIs (Gemini, Claude).
 
 By establishing a **Single Source of Truth**, the Universal MCP Bridge ensures that every AI agent in your workflow has access to the same powerful capabilities, instantly.
+
+## 🚀 Repository
+[https://github.com/Abderraouf-yt/universal-mcp-bridge](https://github.com/Abderraouf-yt/universal-mcp-bridge)
 
 ## 🚀 Key Features
 - **Centralized Registry**: Maintains a master configuration file (`.mcp_master.json`) that acts as the canonical source for all server definitions.

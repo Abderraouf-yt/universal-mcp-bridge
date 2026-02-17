@@ -27,6 +27,7 @@ Successfully transformed a fragmented MCP configuration setup into a unified, pr
 ## 📂 Current File State
 - **Main Registry**: `C:\Users\toumi\.mcp_master.json`
 - **Project Folder**: `C:\Users\toumi\Desktop\Development\2026-PROJECTS\universal-mcp-bridge`
+- **GitHub Repository**: [https://github.com/Abderraouf-yt/universal-mcp-bridge](https://github.com/Abderraouf-yt/universal-mcp-bridge)
 - **Auto-Skill**: `C:\Users\toumi\universal-mcp-bridge-mesh.skill`
 
 ---
