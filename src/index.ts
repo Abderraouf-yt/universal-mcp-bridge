@@ -6,6 +6,7 @@ import { MASTER_CONFIG_PATH, detectClients } from './lib/discovery.js';
 import { performSync } from './lib/sync.js';
 import { checkHealth } from './lib/health.js';
 import { ConfigManager } from './lib/config-manager.js';
+import { startWatcher } from './lib/watcher.js';
 import React from 'react';
 import { render } from 'ink';
 import { App } from './ui/App.js';
@@ -55,6 +56,13 @@ program
   .action(async () => {
     console.log(chalk.cyan('\n📡 Universal MCP Bridge Server launching...'));
     await import('./server.js');
+  });
+
+program
+  .command('watch')
+  .description('Start the background watcher service (Phase 4)')
+  .action(() => {
+    startWatcher();
   });
 
 program

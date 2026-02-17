@@ -39,12 +39,14 @@
     - `add_server`: Tool to register new servers via LLM prompts.
     - `trigger_sync`: Tool to force refresh across all spokes.
 
-### Phase 4: The Service (Q3 2026)
+### Phase 4: The Service (In Progress)
 - **Deliverable**: Background Daemon.
+- **Status**: Core watcher implemented.
 - **Features**:
     - Real-time file watching (Chokidar integration).
-    - OS Notification system for sync events.
-    - Secure Vault for credential management.
+    - Automatic bidirectional sync on file change.
+    - [ ] OS Notification system for sync events.
+    - [ ] Secure Vault for credential management.
 
 ### Phase 5: The Cloud Hub (Q4 2026 - SaaS)
 - **Deliverable**: Paid Platform.
