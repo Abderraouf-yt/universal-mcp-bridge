@@ -29,7 +29,7 @@
 - **Features**:
     - `userTier` logic (Community, Pro, Enterprise).
     - Pro-tier "Go Pro" upgrade hooks.
-    - `login` command simulation.
+    - `login` / `signup` commands with Supabase Auth.
 
 ### Phase 3: The "MCP-First" Architecture (Completed)
 - **Objective**: Transform the Bridge into an MCP Server itself.
@@ -46,18 +46,31 @@
     - OS Notification system for sync events.
     - Secure Vault for credential management (System Keychain integration).
 
-### Phase 5: The Cloud Hub (Concept/Scaffold Ready)
+### Phase 5: The Cloud Hub (Completed)
 - **Deliverable**: Pro Dashboard & Cloud Client.
 - **Features**:
     - [x] Visualized Pro Dashboard (`visualizer/dashboard.html`).
-    - [x] Cloud Client simulation logic (`src/lib/cloud.ts`).
-    - [ ] Real-time cross-device sync (Production Ready Roadmap).
+    - [x] Cloud Client implementation logic (`src/lib/cloud.ts`).
+    - [x] Supabase Backend (Auth, Registries, Usage Stats).
+    - [x] Real-time cloud push/pull sync integration.
+    - [x] React-based Pro Dashboard (`web-dashboard/`).
+    - [x] Telemetry Integration (Oracle Agent logic integrated into Server).
+    - [x] Real-time cross-device sync (Vision Agent UI integration complete).
+
+### Phase 6: Advanced Distribution (Q3 2026 - Zero Friction)
+- **Objective**: Eliminate all setup friction for non-Node users.
+- **Features**:
+    - [ ] **Standalone Binaries**: Use `pkg` or `bun compile` to create .exe/.app files.
+    - [ ] **Magic Link Deep Handler**: Implement `mcp://connect` protocol for one-click browser-to-CLI configuration.
+    - [ ] **Web-Based Config Generator**: A Next.js visual tool to build registries that "Beam" directly to the local CLI.
+    - [ ] **Global NPX Alias**: `npx mcp-bridge start` as the universal setup command.
 
 ## 3. Architecture Design (2026 Best Practices)
 1.  **Registry**: Zod-validated JSON schema (`.mcp_master.json`).
 2.  **Adapters**: Pluggable modules for diverse client config formats.
 3.  **Transport**: StdIO support for seamless agent-to-agent communication.
 4.  **Vault**: Native OS Keychain security for sensitive PATs/Keys.
+5.  **Distribution**: Single-binary deployment (Planned).
 
 ## 4. Technology Stack
 - **Language**: TypeScript 5.x + Node.js 22+ (ESM).
@@ -66,6 +79,7 @@
 - **Protocol**: @modelcontextprotocol/sdk.
 - **Security**: keytar (System Keychain).
 - **Watching**: chokidar.
+- **Backend**: Supabase (PostgreSQL + Auth).
 
 ## 5. Monetization Strategy
 - **Community (Free)**: All local sync and discovery features.

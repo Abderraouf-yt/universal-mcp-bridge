@@ -7,6 +7,7 @@ import {
 import { detectClients, MASTER_CONFIG_PATH } from "./lib/discovery.js";
 import { performSync } from "./lib/sync.js";
 import { ConfigManager } from "./lib/config-manager.js";
+import { TelemetryManager } from "./lib/telemetry.js";
 
 const server = new Server(
   {
@@ -57,31 +58,44 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
  * Tool logic
  */
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
-  switch (request.params.name) {
-    case "sync_bridge": {
-      await performSync();
-      return {
-        content: [{ type: "text", text: "Sync complete." }],
-      };
+  const executeTool = async () => {
+    switch (request.params.name) {
+      case "sync_bridge": {
+        await performSync();
+        return {
+          content: [{ type: "text", text: "Sync complete." }],
+        };
+      }
+      case "list_mcp_clients": {
+        const clients = detectClients();
+        return {
+          content: [{ type: "text", text: JSON.stringify(clients, null, 2) }],
+        };
+      }
+      case "add_mcp_server": {
+        const { name, command, args } = request.params.arguments as any;
+        const masterConfig = ConfigManager.loadConfig(MASTER_CONFIG_PATH);
+        ConfigManager.addServer(masterConfig, name, { command, args: args || [] });
+        ConfigManager.saveConfig(MASTER_CONFIG_PATH, masterConfig);
+        return {
+          content: [{ type: "text", text: `Server ${name} added to master registry.` }],
+        };
+      }
+      default:
+        throw new Error(`Unknown tool: ${request.params.name}`);
     }
-    case "list_mcp_clients": {
-      const clients = detectClients();
-      return {
-        content: [{ type: "text", text: JSON.stringify(clients, null, 2) }],
-      };
-    }
-    case "add_mcp_server": {
-      const { name, command, args } = request.params.arguments as any;
-      const masterConfig = ConfigManager.loadConfig(MASTER_CONFIG_PATH);
-      ConfigManager.addServer(masterConfig, name, { command, args: args || [] });
-      ConfigManager.saveConfig(MASTER_CONFIG_PATH, masterConfig);
-      return {
-        content: [{ type: "text", text: `Server ${name} added to master registry.` }],
-      };
-    }
-    default:
-      throw new Error(`Unknown tool: ${request.params.name}`);
-  }
+  };
+
+  const response = await executeTool();
+  
+  // Asynchronously record telemetry to avoid blocking response
+  TelemetryManager.recordToolUsage(
+    request.params.name,
+    request.params.arguments || {},
+    response
+  ).catch(err => console.error("Telemetry error:", err));
+
+  return response;
 });
 
 /**

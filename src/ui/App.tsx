@@ -4,6 +4,7 @@ import { Header } from './Header.js';
 import { SyncProgress } from './SyncProgress.js';
 import { OnboardingFlow } from './OnboardingFlow.js';
 import { getUserTier } from '../lib/auth.js';
+import { CloudManager } from '../lib/cloud.js';
 
 interface AppProps {
   mode: 'ui' | 'sync' | 'init';
@@ -11,6 +12,13 @@ interface AppProps {
 
 export const App = ({ mode }: AppProps) => {
   const tier = getUserTier();
+
+  const [analytics, setAnalytics] = React.useState<any>(null);
+  React.useEffect(() => {
+    if (tier === 'pro' || tier === 'enterprise') {
+      CloudManager.getAnalytics().then(setAnalytics);
+    }
+  }, [tier]);
 
   return (
     <Box flexDirection="column" padding={1}>
@@ -38,6 +46,19 @@ export const App = ({ mode }: AppProps) => {
               <Text color="black">Unlock Cloud Sync & Advanced Analytics with Pro Tier.</Text>
             </Box>
           )}
+          
+          {tier === 'pro' && analytics && (
+            <Box marginTop={1} borderStyle="round" borderColor="yellow" padding={1}>
+              <Box flexDirection="column" marginRight={2}>
+                <Text bold color="yellow">Analytics</Text>
+                <Text color="gray" italic> (Pro Feature)</Text>
+              </Box>
+              <Box flexDirection="column" alignItems="flex-end">
+                <Text><Text bold color="yellow">Tokens Saved:</Text> {analytics.tokenSavings}</Text>
+                <Text><Text bold color="yellow">Most Used Tool:</Text> {analytics.mostUsedTool}</Text>
+              </Box>
+            </Box>
+          )}
         </Box>
       )}
 
@@ -46,7 +67,7 @@ export const App = ({ mode }: AppProps) => {
 
       <Box marginTop={1} borderStyle="single" borderColor="gray" paddingX={1}>
         <Text color="gray">Tier: </Text>
-        <Text color={tier === 'pro' ? 'gold' : 'white'} bold>{tier.toUpperCase()} Edition</Text>
+        <Text color={tier === 'pro' ? 'yellow' : 'white'} bold>{tier.toUpperCase()} Edition</Text>
         <Text color="gray"> | v1.0.0</Text>
       </Box>
     </Box>

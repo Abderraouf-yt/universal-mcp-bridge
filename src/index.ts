@@ -10,6 +10,9 @@ import { startWatcher } from './lib/watcher.js';
 import React from 'react';
 import { render } from 'ink';
 import { App } from './ui/App.js';
+import { performLogin } from './lib/auth.js';
+import { supabase } from './lib/supabase.js';
+import { TelemetryManager } from './lib/telemetry.js';
 
 const program = new Command();
 
@@ -73,22 +76,43 @@ program
   });
 
 program
-  .command('login')
-  .description('Sign in to your Universal MCP Bridge account (Pro/Enterprise)')
-  .action(async () => {
-    console.log(chalk.cyan('\n🔐 Connecting to Universal MCP Cloud...'));
-    await new Promise(r => setTimeout(r, 1000));
+  .command('signup <email> <password>')
+  .description('Create a new Universal MCP Bridge account')
+  .action(async (email, password) => {
+    console.log(chalk.cyan('\n🚀 Creating your Universal MCP account...'));
+    const { data, error } = await supabase.auth.signUp({ email, password });
     
-    // Simulate upgrade logic
-    const masterConfig = ConfigManager.loadConfig(MASTER_CONFIG_PATH);
-    masterConfig.userTier = 'pro';
-    ConfigManager.saveConfig(MASTER_CONFIG_PATH, masterConfig);
+    if (error) {
+      console.log(chalk.red(`❌ Signup failed: ${error.message}`));
+      return;
+    }
 
-    console.log(chalk.green('✅ Successfully logged in!'));
-    console.log(chalk.yellow('✨ Your account has been upgraded to PRO Edition.\n'));
-    console.log(chalk.cyan('Run "mcp-bridge ui" to see your new status.\n'));
+    console.log(chalk.green('✅ Account created successfully! Please check your email for confirmation.'));
   });
 
+program
+  .command('login <email> <password>')
+  .description('Sign in to your Universal MCP Bridge account (Pro/Enterprise)')
+  .action(async (email, password) => {
+    console.log(chalk.cyan('\n🔐 Connecting to Universal MCP Cloud...'));
+    
+    try {
+      const success = await performLogin(email, password);
+
+      if (success) {
+        // Upgrade to Pro logic (for demo purposes, we automatically upgrade logged in users to Pro)
+        const masterConfig = ConfigManager.loadConfig(MASTER_CONFIG_PATH);
+        masterConfig.userTier = 'pro';
+        ConfigManager.saveConfig(MASTER_CONFIG_PATH, masterConfig);
+
+        console.log(chalk.green('✅ Successfully logged in!'));
+        console.log(chalk.yellow('✨ Your account has been upgraded to PRO Edition.\n'));
+        console.log(chalk.cyan('Run "mcp-bridge ui" to see your new status.\n'));
+      }
+    } catch (err: any) {
+      console.log(chalk.red(`❌ Login failed: ${err.message}`));
+    }
+  });
 program
   .command('init')
   .description('Initialize the bridge and auto-detect MCP clients')
@@ -104,10 +128,57 @@ program
   });
 
 program
+
   .command('status')
+
   .description('Check the health of all registered MCP servers')
+
   .action(() => {
+
     checkHealth();
+
   });
+
+
+
+program
+
+  .command('stats')
+
+  .description('Display token usage and tool telemetry (Oracle Analytics)')
+
+  .action(async () => {
+
+    console.log(chalk.magenta('\n🔮 Oracle Telemetry Report\n'));
+
+    const stats = await TelemetryManager.getStats();
+
+    
+
+    console.log(chalk.white('Total Estimated Tokens: ') + chalk.green(stats.totalTokens.toLocaleString()));
+
+    console.log(chalk.white('Tool Usage Breakdown:'));
+
+    
+
+    if (Object.keys(stats.toolUsage).length === 0) {
+
+      console.log(chalk.gray('  (No usage recorded yet)'));
+
+    } else {
+
+      Object.entries(stats.toolUsage).forEach(([tool, count]) => {
+
+        console.log(`  - ${chalk.cyan(tool)}: ${chalk.yellow(count)} calls`);
+
+      });
+
+    }
+
+    console.log('');
+
+  });
+
+
 
 program.parse();
