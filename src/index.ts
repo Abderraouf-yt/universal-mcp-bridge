@@ -5,6 +5,7 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { MASTER_CONFIG_PATH, detectClients } from './lib/discovery.js';
 import { performSync } from './lib/sync.js';
 import { checkHealth } from './lib/health.js';
+import { ConfigManager } from './lib/config-manager.js';
 import React from 'react';
 import { render } from 'ink';
 import { App } from './ui/App.js';
@@ -15,6 +16,46 @@ program
   .name('mcp-bridge')
   .description('Universal MCP Bridge: The Single Source of Truth for MCP Configs')
   .version('1.0.0');
+
+program
+  .command('add <name> <cmd>')
+  .description('Register a new MCP server in the master registry')
+  .option('-a, --args <args...>', 'Command line arguments for the server')
+  .option('-e, --env <env...>', 'Environment variables (KEY=VALUE)')
+  .action((name, cmd, options) => {
+    const masterConfig = ConfigManager.loadConfig(MASTER_CONFIG_PATH);
+    
+    const env: Record<string, string> = {};
+    if (options.env) {
+      options.env.forEach((pair: string) => {
+        const [key, value] = pair.split('=');
+        if (key && value) env[key] = value;
+      });
+    }
+
+    const newServer: any = {
+      command: cmd,
+      args: options.args || [],
+    };
+
+    if (Object.keys(env).length > 0) {
+      newServer.env = env;
+    }
+
+    ConfigManager.addServer(masterConfig, name, newServer);
+    ConfigManager.saveConfig(MASTER_CONFIG_PATH, masterConfig);
+    
+    console.log(chalk.green(`\n✅ Registered "${name}" in master registry.`));
+    console.log(chalk.cyan('Run "mcp-bridge sync" to propagate this to all clients.\n'));
+  });
+
+program
+  .command('serve')
+  .description('Start the bridge as an MCP server (Phase 3)')
+  .action(async () => {
+    console.log(chalk.cyan('\n📡 Universal MCP Bridge Server launching...'));
+    await import('./server.js');
+  });
 
 program
   .command('ui')

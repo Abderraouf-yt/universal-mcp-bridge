@@ -15,6 +15,13 @@ export class ConfigManager {
   }
 
   /**
+   * Adds a new server to the master config.
+   */
+  static addServer(master: MCPConfig, name: string, config: MCPServerConfig): void {
+    master.mcpServers[name] = config;
+  }
+
+  /**
    * Atomic-style write
    */
   static saveConfig(path: string, config: MCPConfig): void {

@@ -1,80 +1,77 @@
 # Universal MCP Bridge: Development Plan
 
 ## 1. Executive Summary
-**Universal MCP Bridge** (Project Codename: *MCP-Omni*) aims to become the industry-standard configuration manager for the Model Context Protocol ecosystem. As of 2026, AI developers struggle with "configuration sprawl," managing duplicate server definitions across 3-5 different tools. This project centralizes that management into a single "Hub."
+**Universal MCP Bridge** (Project Codename: *MCP-Omni*) is the industry-standard configuration manager for the Model Context Protocol ecosystem. It centralizes fragmented MCP server definitions into a Single Source of Truth, enabling seamless tool parity across all 2026-era AI agents.
 
 ## 2. Project Scope
 
 ### Phase 1: Consolidation (Completed)
-- **Deliverable**: A PowerShell script (`sync-mcp.ps1`) that merges and syncs configurations.
-- **Target Users**: Power users on Windows using Gemini CLI, Antigravity, and Roo Code.
-- **Status**: Stable & Operational.
+- **Deliverable**: PowerShell prototype (`sync-mcp.ps1`).
+- **Status**: Stable.
 
-### Phase 2: The CLI Tool (In Progress)
-- **Deliverable**: A Node.js-based CLI (`mcp-bridge`).
+### Phase 2: The CLI Core (Completed)
+- **Deliverable**: Node.js/TypeScript CLI (`mcp-bridge`).
 - **Features**:
-    - `mcp-bridge init`: Auto-detects installed clients.
-    - `mcp-bridge add`: Installs new servers via NPM/Pip/Docker and registers them.
-    - `mcp-bridge sync`: Cross-platform sync (Windows/macOS/Linux).
-- **Tech Stack**: TypeScript, Node.js, Commander.js, Zod (validation).
+    - `mcp-bridge init`: Auto-discovery of 5+ major AI clients.
+    - `mcp-bridge sync`: Robust bidirectional merging engine.
+    - `mcp-bridge status`: Health monitoring for local/external tools.
+- **Status**: Stable & Production-Ready.
 
-### Phase 3: The Service (Q3 2026)
-- **Deliverable**: A background daemon.
+### Phase 2.5: Interactive UX & Design (Completed)
+- **Deliverable**: Ink-based Interactive Dashboard.
 - **Features**:
-    - Real-time file watching (no manual sync needed).
-    - System Tray icon for quick status checks.
-    - Secure Vault integration for API keys (Windows Credential Manager / macOS Keychain).
+    - Animated progress tracking (`SyncProgress`).
+    - High-fidelity ASCII art and terminal aesthetics.
+    - User-friendly onboarding flow.
 
-### Phase 4: The Cloud Hub (Q4 2026 - Paid Tier)
-- **Deliverable**: SaaS Platform.
+### Phase 2.6: Monetization Framework (Completed)
+- **Deliverable**: Tiered Architecture.
 - **Features**:
-    - Sync configurations across devices.
-    - "Team Registries" for sharing corporate toolsets.
-    - Usage analytics and token cost monitoring.
+    - `userTier` logic (Community, Pro, Enterprise).
+    - Pro-tier "Go Pro" upgrade hooks.
+    - `login` command skeleton.
 
-## 3. Architecture Design
+### Phase 3: The "MCP-First" Architecture (Q2 2026)
+- **Objective**: Transform the Bridge into an MCP Server itself.
+- **Description**: Allows other AI agents to programmatically query and modify the MCP registry via the protocol.
+- **Features**:
+    - `list_clients`: Tool to expose detected environments.
+    - `add_server`: Tool to register new servers via LLM prompts.
+    - `trigger_sync`: Tool to force refresh across all spokes.
 
-### Core Components
-1.  **Registry**: A standardized JSON schema (`.mcp_master.json`) acting as the Single Source of Truth.
-2.  **Adapters**: Modules responsible for reading/writing specific client config formats (VS Code, Claude, etc.).
-3.  **Engine**: The logic that diffs, merges, and validates server definitions.
-4.  **Connectors**: Hooks that integrate with the OS (File Watchers, Keychains).
+### Phase 4: The Service (Q3 2026)
+- **Deliverable**: Background Daemon.
+- **Features**:
+    - Real-time file watching (Chokidar integration).
+    - OS Notification system for sync events.
+    - Secure Vault for credential management.
 
-### Data Flow
-```mermaid
-graph TD
-    User[Developer] -->|Adds Tool| Hub[MCP Bridge Hub]
-    Hub -->|Validates| Health[Health Check]
-    Hub -->|Writes| Master[Master Registry]
-    Master -->|Syncs| Gemini[Gemini CLI]
-    Master -->|Syncs| Claude[Claude Desktop]
-    Master -->|Syncs| VSCode[VS Code / Antigravity]
-```
+### Phase 5: The Cloud Hub (Q4 2026 - SaaS)
+- **Deliverable**: Paid Platform.
+- **Features**:
+    - Cross-device sync.
+    - Team-shared registries.
+    - Analytics dashboard for token/tool usage.
 
-## 4. Technology Stack (Phase 2)
-- **Runtime**: Node.js (LTS)
-- **Language**: TypeScript 5.x
-- **CLI Framework**: Oclif or Commander
-- **Validation**: Zod
-- **File Watching**: Chokidar
-- **System Integration**: node-keytar (for secrets)
+## 3. Architecture Design (2026 Best Practices)
+1.  **Registry**: Zod-validated JSON schema (`.mcp_master.json`).
+2.  **Adapters**: Pluggable modules for diverse client config formats.
+3.  **Transport**: StdIO and SSE support for Phase 3 server mode.
+4.  **UI Engine**: React/Ink for interactive terminal experience.
+
+## 4. Technology Stack
+- **Language**: TypeScript 5.x + Node.js 22+ (ESM).
+- **UI Framework**: Ink (React CLI).
+- **Validation**: Zod.
+- **Protocol**: @modelcontextprotocol/sdk.
+- **Styling**: Chalk, Gradient-String, Ink-Spinner.
 
 ## 5. Monetization Strategy
-- **Community Edition (Open Source / Free)**:
-    - Local sync.
-    - Basic CLI.
-    - Unlimited local servers.
-- **Pro Edition ($5/mo)**:
-    - Cloud Sync.
-    - Encrypted Secret Vault.
-    - Priority Support.
-- **Enterprise Edition ($20/user/mo)**:
-    - Team Registries.
-    - SSO / RBAC.
-    - Audit Logs.
+- **Community (Free)**: All local sync and discovery features.
+- **Pro ($5/mo)**: Cloud Sync, Advanced Health Checks, Analytics.
+- **Enterprise ($20/user/mo)**: Team Hub, RBAC, SSO, Audit Logs.
 
 ## 6. Immediate Next Steps
-1.  Initialize the Node.js project structure.
-2.  Port the `sync-mcp.ps1` logic to TypeScript.
-3.  Implement the "Auto-Discovery" module for standard paths.
-4.  Release v0.1.0 alpha to internal testing.
+1.  Implement the `add` command (Port from task list).
+2.  Install `@modelcontextprotocol/sdk` to begin Phase 3.
+3.  Implement `src/server.ts` to expose the Bridge as an MCP server.
