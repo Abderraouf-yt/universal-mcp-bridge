@@ -41,11 +41,11 @@
 
 ### Phase 4: The Service (In Progress)
 - **Deliverable**: Background Daemon.
-- **Status**: Core watcher implemented.
+- **Status**: Core watcher and notifications implemented.
 - **Features**:
     - Real-time file watching (Chokidar integration).
     - Automatic bidirectional sync on file change.
-    - [ ] OS Notification system for sync events.
+    - OS Notification system for sync events.
     - [ ] Secure Vault for credential management.
 
 ### Phase 5: The Cloud Hub (Q4 2026 - SaaS)

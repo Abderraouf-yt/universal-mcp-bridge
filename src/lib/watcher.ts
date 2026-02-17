@@ -1,5 +1,6 @@
 import chokidar from 'chokidar';
 import chalk from 'chalk';
+import notifier from 'node-notifier';
 import { detectClients, MASTER_CONFIG_PATH } from './discovery.js';
 import { performSync } from './sync.js';
 
@@ -26,6 +27,13 @@ export function startWatcher() {
   watcher.on('change', (path: string) => {
     console.log(chalk.yellow(`\n📝 Change detected in: ${path}`));
     performSync();
+    
+    notifier.notify({
+      title: 'Universal MCP Bridge',
+      message: 'Sync complete across all clients.',
+      sound: true,
+      wait: false
+    });
   });
 
   watcher.on('error', (error) => console.log(chalk.red(`Watcher error: ${error}`)));
